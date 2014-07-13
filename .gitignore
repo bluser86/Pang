@@ -20,6 +20,14 @@
 *.out
 *.app
 
+# Log
+*.tlog
+
+# Project specific
+SFML-2.1/
+[Dd]ebug/
+[Rr]elease/
+
 # =========================
 # Operating System Files
 # =========================
@@ -32,7 +40,8 @@
 .LSOverride
 
 # Icon must ends with two \r.
-Icon
+Icon
+
 
 # Thumbnails
 ._*
