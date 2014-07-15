@@ -32,13 +32,11 @@ void PlayerPaddle::Update(sf::Time elapsed)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
 		_velocity -= 10.0f;
-		printf("Left Pressed\n");
 	}
 	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
 		_velocity += 10.0f;
-		printf("Right Pressed\n");
 	}
 	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
