@@ -27,6 +27,8 @@
 SFML-2.1/
 [Dd]ebug/
 [Rr]elease/
+*.opensdf
+*.sdf
 
 # =========================
 # Operating System Files
