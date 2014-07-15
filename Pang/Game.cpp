@@ -3,7 +3,10 @@
 #include "SplashScreen.h"
 #include "Menu.h"
 #include "PlayerPaddle.h"
+#include "AIPaddle.h"
 #include "GameBall.h"
+#include "AudioServiceLocator.h"
+#include "SFMLSoundProvider.h"
 
 void Game::Start(void)
 {
@@ -13,16 +16,24 @@ void Game::Start(void)
 	}
 
 	_mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "Pang!");
+	
+	SFMLSoundProvider soundProvider;
+	AudioServiceLocator::RegisterService(&soundProvider);
+	soundProvider.PlaySong("audio/soundtrack.ogg", true);
 
 	PlayerPaddle *player1 = new PlayerPaddle();
 	player1->SetPosition((SCREEN_WIDTH/2),700);
+
+	AIPaddle *player2 = new AIPaddle();
+	player2->SetPosition((SCREEN_WIDTH/2), 40);
 
 	GameBall *ball = new GameBall();
 	ball->SetPosition((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2));
 
 	_objectManager.Add("Paddle1", player1);
+	_objectManager.Add("Paddle2", player2);
 	_objectManager.Add("Ball", ball);
-
+	
 	_gameState = Game::ShowingSplash;
 
 	sf::Clock clock;

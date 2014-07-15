@@ -2,6 +2,8 @@
 #include "GameBall.h"
 #include "Game.h"
 #include "PlayerPaddle.h"
+#include "AIPaddle.h"
+#include "AudioServiceLocator.h"
 
 GameBall::GameBall() :
 	_velocity(230.0f),
@@ -101,13 +103,41 @@ void GameBall::Update(sf::Time elapsed)
 			}
 
 			_velocity += 50.0f;
+
+			AudioServiceLocator::GetAudioProvider()->PlaySound("audio/plop.ogg");
+		}
+	}
+
+	AIPaddle* player2 = dynamic_cast<AIPaddle*>(Game::GetObjectManager().Get("Paddle2"));
+
+	if(player2 != NULL)
+	{
+		sf::Rect<float> p2BB = player2->GetBoundingBox();
+		sf::Rect<float> ballBB = GetBoundingBox();
+
+		// Paddle collision
+		if(p2BB.intersects(GetBoundingBox()))
+		{
+			if(ballBB.top < p2BB.top + p2BB.height)
+			{
+				SetPosition(GetPosition().x, p2BB.top + p2BB.height + GetHeight() + 1);
+			}
+
+			_angle = 180 - _angle;
+			moveByY = -moveByY;
+
+			_velocity += 50.0f;
+
+			AudioServiceLocator::GetAudioProvider()->PlaySound("audio/plop.ogg");
 		}
 	}
 
 	if(GetPosition().y - GetHeight() / 2 <= 0)
 	{
-		_angle = 180 - _angle;
-		moveByY = -moveByY;
+		//_angle = 180 - _angle;
+		//moveByY = -moveByY;
+
+		Reset();
 	}
 
 	if(GetPosition().y + GetHeight() / 2 + moveByY >= Game::SCREEN_HEIGHT)
@@ -124,12 +154,12 @@ void GameBall::Reset()
 
 	_angle = GetRandomAngle();
 	_velocity = 220.0f;
-	_elapsedTimeSinceStart - 0.0f;
+	_elapsedTimeSinceStart = 0.0f;
 }
 
 float GameBall::GetRandomAngle()
 {
-	return (float) (rand() % 100000000 + 1);
+	return std::rand() % 360 + 1;
 }
 
 float GameBall::LinearVelocityX(float angle)
