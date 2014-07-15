@@ -64,6 +64,8 @@ void GameBall::Update(sf::Time elapsed)
 		// Paddle collision
 		if(p1BB.intersects(GetBoundingBox()))
 		{
+			AudioServiceLocator::GetAudioProvider()->PlaySound("audio/plop.ogg");
+
 			_angle = 360.0f - (_angle - 180.0f);
 
 			if(_angle > 360.0f)
@@ -103,8 +105,6 @@ void GameBall::Update(sf::Time elapsed)
 			}
 
 			_velocity += 50.0f;
-
-			AudioServiceLocator::GetAudioProvider()->PlaySound("audio/plop.ogg");
 		}
 	}
 
@@ -118,6 +118,8 @@ void GameBall::Update(sf::Time elapsed)
 		// Paddle collision
 		if(p2BB.intersects(GetBoundingBox()))
 		{
+			AudioServiceLocator::GetAudioProvider()->PlaySound("audio/plop.ogg");
+
 			if(ballBB.top < p2BB.top + p2BB.height)
 			{
 				SetPosition(GetPosition().x, p2BB.top + p2BB.height + GetHeight() + 1);
@@ -126,17 +128,36 @@ void GameBall::Update(sf::Time elapsed)
 			_angle = 180 - _angle;
 			moveByY = -moveByY;
 
-			_velocity += 50.0f;
+			float playerVelocity = player1->GetVelocity();
 
-			AudioServiceLocator::GetAudioProvider()->PlaySound("audio/plop.ogg");
+			// Adjust angles for when the paddle is moving one way or another
+			// Player moving left
+			if(playerVelocity < 0)
+			{
+				_angle -= 20.0f;
+
+				if(_angle > 360.0f) 
+				{
+					_angle -= 360.0f;
+				}
+			}
+			// Player moving right
+			else if(playerVelocity > 0) 
+			{
+				_angle += 20.0f;
+
+				if(_angle > 360.0f) 
+				{
+					_angle -= 360.0f;
+				}
+			}
+
+			_velocity += 50.0f;
 		}
 	}
 
 	if(GetPosition().y - GetHeight() / 2 <= 0)
 	{
-		//_angle = 180 - _angle;
-		//moveByY = -moveByY;
-
 		Reset();
 	}
 
