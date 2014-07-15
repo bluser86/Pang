@@ -71,13 +71,14 @@ void GameBall::Update(sf::Time elapsed)
 
 			moveByY = -moveByY;
 
-			if(GetBoundingBox().height > player1->GetBoundingBox().top)
+			if(GetBoundingBox().top + GetBoundingBox().height > player1->GetBoundingBox().top)
 			{
-				SetPosition(GetPosition().x, player1->GetBoundingBox().top - GetWidth() / 2 - 1);
+				SetPosition(GetPosition().x, player1->GetBoundingBox().top - GetHeight() - 1);
 			}
 
 			float playerVelocity = player1->GetVelocity();
 
+			// Adjust angles for when the paddle is moving one way or another
 			// Player moving left
 			if(playerVelocity < 0)
 			{
@@ -99,7 +100,7 @@ void GameBall::Update(sf::Time elapsed)
 				}
 			}
 
-			_velocity += 5.0f;
+			_velocity += 50.0f;
 		}
 	}
 
